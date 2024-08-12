@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="space.dev.audioplayer.MainController">
+
+  <HBox prefHeight="103.0" prefWidth="663.0">
+      <ListView fx:id="fileListView" prefHeight="103.0" prefWidth="285.0" />
+    <Button fx:id="openButton" onAction="#handleOpenFolder" text="Open">
+         <HBox.margin>
+            <Insets top="4.0" />
+         </HBox.margin></Button>
+    <Button fx:id="playButton" onAction="#handlePlay" text="Play">
+         <HBox.margin>
+            <Insets top="4.0" />
+         </HBox.margin></Button>
+    <Button fx:id="pauseButton" onAction="#handlePause" text="Pause">
+         <HBox.margin>
+            <Insets top="4.0" />
+         </HBox.margin></Button>
+    <Button fx:id="stopButton" onAction="#handleStop" text="Stop">
+         <HBox.margin>
+            <Insets top="4.0" />
+         </HBox.margin></Button>
+    <Label fx:id="currentTimeLabel" text="00:00">
+         <HBox.margin>
+            <Insets top="8.0" />
+         </HBox.margin></Label>
+    <Slider fx:id="progressSlider" max="100" min="0" value="0">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <HBox.margin>
+            <Insets top="10.0" />
+         </HBox.margin></Slider>
+    <Label fx:id="totalTimeLabel" text="00:00">
+         <HBox.margin>
+            <Insets top="8.0" />
+         </HBox.margin></Label>
+  </HBox>
+
+     <HBox>
+    <Label fx:id="volumeLabel" prefHeight="17.0" prefWidth="81.0" text="Volume: 50%" />
+    <Slider fx:id="volumeSlider" max="1" min="0" value="0.5" />
+  </HBox>
+
+  <HBox />
+
+</VBox>
