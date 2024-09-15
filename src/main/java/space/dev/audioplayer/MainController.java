@@ -10,48 +10,61 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.stage.DirectoryChooser;
-import java.util.prefs.Preferences;
 
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.prefs.Preferences;
+
+import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.AudioInputStream;
 
 import javafx.animation.AnimationTimer;
+
+import static java.lang.Float.NaN;
 
 public class MainController {
 
     @FXML
-    private Button openButton, playButton, pauseButton, stopButton;
+    private Button openButton, playButton, pauseButton, cycleButton;
 
     @FXML
     private Slider volumeSlider, progressSlider;
 
     @FXML
-    private Label currentTimeLabel, totalTimeLabel, volumeLabel ;
+    private Label currentTimeLabel, totalTimeLabel, volumeLabel;
 
     @FXML
     private ListView<String> fileListView;
 
-    private File currentDirectory;
 
+    private boolean isCycleMode = false;
+    private File currentDirectory;
     private Clip audioClip;
     private AudioInputStream audioStream;
-    private DoubleProperty volume = new SimpleDoubleProperty(0.5);
+    private DoubleProperty volume;
     private boolean isDragging = false;
 
     private Preferences prefs;
     private static final String PREF_KEY_LAST_DIR = "lastOpenedDirectory";
+    private static final String PREF_KEY_LAST_VOLUME = "lastVolume";
+
 
     @FXML
     public void initialize() {
+
+        prefs = Preferences.userNodeForPackage(MainController.class);
+
         playButton.setDisable(true);
         pauseButton.setDisable(true);
-        stopButton.setDisable(true);
+        cycleButton.setDisable(true);
 
+        volume = new SimpleDoubleProperty(Double.parseDouble(prefs.get(PREF_KEY_LAST_VOLUME, String.valueOf(0.5))));
         volumeSlider.valueProperty().bindBidirectional(volume);
         volumeLabel.textProperty().bind(Bindings.format("Volume: %.0f%%", volumeSlider.valueProperty().multiply(100)));
 
-        prefs = Preferences.userNodeForPackage(MainController.class);
+
         String lastDirPath = prefs.get(PREF_KEY_LAST_DIR, null);
 
         if (lastDirPath != null) {
@@ -68,7 +81,10 @@ public class MainController {
                 float dB = (float) (Math.log(newVal.doubleValue()) / Math.log(10) * 20);
                 volumeControl.setValue(dB);
             }
+            // Save the last volume value
+            prefs.put(PREF_KEY_LAST_VOLUME, String.valueOf(newVal.doubleValue()));
         });
+
 
         fileListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null && currentDirectory != null) {
@@ -125,9 +141,15 @@ public class MainController {
     }
 
     private void loadAudioFiles(File directory) {
-        File[] audioFiles = directory.listFiles((dir, name) -> name.endsWith(".wav"));
+        // Фильтруем файлы для отображения только WAV и MP3
+        File[] audioFiles = directory.listFiles((dir, name) -> name.toLowerCase().endsWith(".wav") || name.toLowerCase().endsWith(".mp3"));
+
+        // Проверяем, что файлы найдены
         if (audioFiles != null) {
+            // Очищаем список перед добавлением новых файлов
             fileListView.getItems().clear();
+
+            // Добавляем все найденные аудиофайлы в список
             for (File file : audioFiles) {
                 fileListView.getItems().add(file.getName());
             }
@@ -140,16 +162,16 @@ public class MainController {
             audioClip.start();
             playButton.setDisable(true);
             pauseButton.setDisable(false);
-            stopButton.setDisable(false);
+            cycleButton.setDisable(false);
         }
     }
 
     @FXML
     private void handlePause() {
         if (audioClip != null && audioClip.isRunning()) {
-            audioClip.stop();
-            playButton.setDisable(false);
-            pauseButton.setDisable(true);
+            audioClip.stop();  // Останавливаем, но не сбрасываем позицию
+            playButton.setDisable(false);  // Включаем кнопку Play
+            pauseButton.setDisable(true);  // Отключаем кнопку Pause
         }
     }
 
@@ -160,10 +182,16 @@ public class MainController {
             audioClip.setFramePosition(0);
             playButton.setDisable(false);
             pauseButton.setDisable(true);
-            stopButton.setDisable(true);
+            cycleButton.setDisable(true);
             progressSlider.setValue(0);
             currentTimeLabel.setText("00:00");
         }
+    }
+
+    @FXML
+    private void handleCycle() {
+        isCycleMode = !isCycleMode;
+        cycleButton.setStyle(isCycleMode ? "-fx-background-color: #4fbcff;" : "-fx-background-color: #e0e0e0;");
     }
 
     private void openAudioFile(File audioFile) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
@@ -174,25 +202,42 @@ public class MainController {
             audioStream.close();
         }
 
-        try (AudioInputStream newStream = AudioSystem.getAudioInputStream(audioFile)) {
-            audioStream = newStream;
-            AudioFormat format = audioStream.getFormat();
-            DataLine.Info info = new DataLine.Info(Clip.class, format);
-            audioClip = (Clip) AudioSystem.getLine(info);
-            audioClip.open(audioStream);
+        audioStream = AudioSystem.getAudioInputStream(audioFile);
+        AudioFormat baseFormat = audioStream.getFormat();
+        AudioFormat decodedFormat = new AudioFormat(
+                AudioFormat.Encoding.PCM_SIGNED,
+                baseFormat.getSampleRate(),
+                16,
+                baseFormat.getChannels(),
+                baseFormat.getChannels() * 2,
+                baseFormat.getSampleRate(),
+                false
+        );
 
-            FloatControl volumeControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-            volumeControl.setValue((float) (Math.log(volume.get()) / Math.log(10) * 20));
+        AudioInputStream decodedAudioStream = AudioSystem.getAudioInputStream(decodedFormat, audioStream);
 
-            totalTimeLabel.setText(formatTime(audioClip.getFrameLength() / format.getFrameRate()));
+        DataLine.Info info = new DataLine.Info(Clip.class, decodedFormat);
+        audioClip = (Clip) AudioSystem.getLine(info);
+        audioClip.open(decodedAudioStream);
 
-            audioClip.addLineListener(event -> {
-                if (event.getType() == LineEvent.Type.STOP && !audioClip.isRunning()) {
-                    Platform.runLater(() -> handleStop());
+        FloatControl volumeControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+        volumeControl.setValue((float) (Math.log(volume.get()) / Math.log(10) * 20));
+
+        totalTimeLabel.setText(formatTime(audioClip.getFrameLength() / decodedFormat.getFrameRate()));
+
+        audioClip.addLineListener(event -> {
+            if (event.getType() == LineEvent.Type.STOP && audioClip.getFramePosition() == audioClip.getFrameLength()) {
+                if (isCycleMode) {
+                    Platform.runLater(this::handleStop);
+                    Platform.runLater(this::handlePlay);
+                } else {
+                    // Если режим воспроизведения не циклический, остановите воспроизведение музыки
+                    Platform.runLater(this::handleStop);
                 }
-            });
-        }
+            }
+        });
     }
+
 
     private String formatTime(double seconds) {
         int minutes = (int) seconds / 60;

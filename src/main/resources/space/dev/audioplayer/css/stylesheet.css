@@ -1,0 +1,97 @@
+/* Кнопки */
+.button {
+    -fx-background-color: #e0e0e0; /* однотонный светлый фон */
+    -fx-text-fill: black; /* цвет текста */
+    -fx-border-color: #a6a6a6; /* граница */
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-width: 1;
+}
+
+.button:hover {
+    -fx-background-color: #cccccc; /* изменение цвета при наведении */
+}
+
+.button:pressed {
+    -fx-background-color: #999999; /* изменение цвета при нажатии */
+}
+
+.button:focused {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+/* Слайдеры */
+.slider .track {
+    -fx-background-color: #d0d0d0; /* Цвет трека (фона) слайдера */
+}
+
+.slider .thumb {
+    -fx-background-color: #e1e1e1; /* Цвет бегунка */
+    -fx-background-radius: 5;
+    -fx-border-color: #7a7a7a;
+    -fx-border-radius: 5;
+}
+
+.slider:focused .thumb {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+/* Текстовые поля */
+.text-field {
+    -fx-background-color: #ffffff; /* Цвет фона */
+    -fx-border-color: #a6a6a6; /* Цвет границы */
+    -fx-text-fill: black; /* Цвет текста */
+}
+
+.text-field:focused {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+/* ListView (список) */
+.list-view {
+    -fx-background-color: #f0f0f0; /* Цвет фона */
+    -fx-border-color: #a6a6a6; /* Цвет границы */
+}
+
+.list-view .cell {
+    -fx-background-color: #f0f0f0; /* Цвет ячеек */
+    -fx-text-fill: black; /* Цвет текста в ячейках */
+}
+
+.list-view .cell:selected {
+    -fx-background-color: #b7b7b7; /* Цвет фона выделенного элемента */
+}
+
+.list-view .cell:hover {
+    -fx-background-color: #a9a9a9; /* Цвет фона при наведении */
+}
+
+.list-view .cell:focused {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+/* Поля с метками (Label) */
+.label {
+    -fx-text-fill: black; /* Цвет текста */
+}
+
+/* Кнопки управления воспроизведением */
+.play-button, .pause-button, .stop-button {
+    -fx-background-color: #e0e0e0; /* Однотонный цвет */
+    -fx-border-color: #a6a6a6; /* Граница */
+    -fx-text-fill: black; /* Цвет текста */
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+}
+
+.play-button:hover, .pause-button:hover, .stop-button:hover {
+    -fx-background-color: #cccccc; /* Изменение цвета при наведении */
+}
+
+.play-button:pressed, .pause-button:pressed, .stop-button:pressed {
+    -fx-background-color: #999999; /* Изменение цвета при нажатии */
+}
