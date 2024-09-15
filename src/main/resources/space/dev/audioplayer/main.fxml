@@ -9,20 +9,20 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="320.0" prefWidth="663.0" stylesheets="@css/stylesheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="space.dev.audioplayer.MainController">
+<VBox prefHeight="342.0" prefWidth="644.0" stylesheets="@css/stylesheet.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="space.dev.audioplayer.MainController">
    <ToolBar prefHeight="25.0" prefWidth="663.0" style="-fx-background-color: #c9c9c5;">
      <items>
        <Button fx:id="openButton" mnemonicParsing="false" onAction="#handleOpenFolder" text="Open" />
      </items>
    </ToolBar>
 
-  <HBox prefHeight="341.0" prefWidth="663.0">
-      <ListView fx:id="fileListView" prefHeight="314.0" prefWidth="286.0" />
-      <VBox prefHeight="310.0" prefWidth="374.0">
+  <HBox prefHeight="284.0" prefWidth="593.0">
+      <ListView fx:id="fileListView" prefHeight="284.0" prefWidth="222.0" />
+      <VBox prefHeight="284.0" prefWidth="421.0">
          <children>
-            <HBox prefHeight="35.0" prefWidth="214.0">
+            <HBox prefHeight="35.0" prefWidth="411.0">
                <children>
-                <Label fx:id="currentTimeLabel" prefWidth="29.0" text="00:00">
+                <Label fx:id="currentTimeLabel" prefHeight="16.0" prefWidth="46.0" text="00:00">
                      <HBox.margin>
                         <Insets top="8.0" />
                      </HBox.margin>
@@ -51,7 +51,7 @@
                         <Insets />
                      </HBox.margin>
                   </Button>
-                <Label fx:id="volumeLabel" prefHeight="17.0" prefWidth="81.0" text="Volume: 50%">
+                <Label fx:id="volumeLabel" prefHeight="17.0" prefWidth="96.0" text="Volume: 50%">
                      <HBox.margin>
                         <Insets left="30.0" top="4.0" />
                      </HBox.margin>
@@ -63,7 +63,7 @@
                   </Slider>
                </children>
             </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0" />
+            <HBox prefHeight="100.0" prefWidth="456.0" />
          </children>
       </VBox>
   </HBox>
