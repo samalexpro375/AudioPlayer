@@ -9,16 +9,16 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="342.0" prefWidth="644.0" stylesheets="@css/stylesheet.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="space.dev.audioplayer.MainController">
-   <ToolBar prefHeight="25.0" prefWidth="663.0" style="-fx-background-color: #c9c9c5;">
-     <items>
-       <Button fx:id="openButton" mnemonicParsing="false" onAction="#handleOpenFolder" text="Open" />
-     </items>
+<VBox prefHeight="342.0" prefWidth="644.0" style="-fx-background-color: #517fc9;" stylesheets="@css/stylesheet.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="space.dev.audioplayer.MainController">
+   <ToolBar prefHeight="25.0" prefWidth="663.0" style="-fx-background-color: #28487a;">
+      <items>
+       <Button fx:id="openButton" mnemonicParsing="false" onAction="#handleOpenFolder" stylesheets="@css/Bstyle.css" text="Open" />
+      </items>
    </ToolBar>
 
-  <HBox prefHeight="284.0" prefWidth="593.0">
-      <ListView fx:id="fileListView" prefHeight="284.0" prefWidth="222.0" />
-      <VBox prefHeight="284.0" prefWidth="421.0">
+  <HBox prefHeight="284.0" prefWidth="593.0" style="-fx-background-color: #517fc9;">
+      <ListView fx:id="fileListView" prefHeight="284.0" prefWidth="222.0" style="-fx-background-color: #517fc9;" />
+      <VBox prefHeight="284.0" prefWidth="421.0" style="-fx-background-color: #517fc9;">
          <children>
             <HBox prefHeight="35.0" prefWidth="411.0">
                <children>
@@ -44,13 +44,17 @@
             </HBox>
             <HBox prefHeight="30.0" prefWidth="187.0">
                <children>
-                <Button fx:id="playButton" onAction="#handlePlay" text="Play" />
-                <Button fx:id="pauseButton" onAction="#handlePause" text="Pause" />
-                <Button fx:id="cycleButton" onAction="#handleCycle" text="Cycle">
+                <Button fx:id="playButton" onAction="#handlePlay" stylesheets="@css/Bstyle.css" text="Play" />
+                <Button fx:id="pauseButton" onAction="#handlePause" stylesheets="@css/Bstyle.css" text="Pause" />
+                <Button fx:id="cycleButton" onAction="#handleCycle" prefHeight="50.0" prefWidth="111.0" stylesheets="@css/Bstyle.css" text="Cycle">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                   </Button>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="456.0">
+               <children>
                 <Label fx:id="volumeLabel" prefHeight="17.0" prefWidth="96.0" text="Volume: 50%">
                      <HBox.margin>
                         <Insets left="30.0" top="4.0" />
@@ -61,14 +65,12 @@
                         <Insets top="5.0" />
                      </HBox.margin>
                   </Slider>
-               </children>
-            </HBox>
-            <HBox prefHeight="100.0" prefWidth="456.0" />
+               </children></HBox>
          </children>
       </VBox>
   </HBox>
 
-        <HBox prefHeight="21.0" prefWidth="663.0" />
+        <HBox prefHeight="21.0" prefWidth="663.0" style="-fx-background-color: #28487a;" />
 
   <HBox prefHeight="0.0" prefWidth="663.0" />
 

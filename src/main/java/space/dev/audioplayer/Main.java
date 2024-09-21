@@ -12,9 +12,10 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
+        Scene scene = new Scene(root);
         primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("icons/icon.png")));
         primaryStage.setTitle("Java Audio Player");
-        primaryStage.setScene(new Scene(root));
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
